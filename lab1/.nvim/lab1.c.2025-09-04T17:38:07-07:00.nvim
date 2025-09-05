@@ -1,0 +1,7 @@
+inlcude <stdio.h>
+
+
+int main() {
+   printf("Please enter some text");
+   string input = getline();
+}
