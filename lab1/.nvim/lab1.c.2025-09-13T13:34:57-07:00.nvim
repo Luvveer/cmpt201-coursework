@@ -13,10 +13,9 @@ int main() {
   printf("Please enter some text: ");
   read = getline(&line, &len, stdin);
   if (read != -1) {
-    token = strtok_r(line, " ", &saveptr);
-    printf("Tokens:\n");
+    token = strtok_r(line," ", &saveptr);
     while (token != NULL) {
-      printf("  %s\n", token);
+      printf("%s\n",token);
       token = strtok_r(NULL, " ", &saveptr);
     }
   }

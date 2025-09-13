@@ -16,7 +16,7 @@ int main() {
     token = strtok_r(line, " ", &saveptr);
     printf("Tokens:\n");
     while (token != NULL) {
-      printf("  %s\n", token);
+      printf("    %s\n", token);
       token = strtok_r(NULL, " ", &saveptr);
     }
   }
