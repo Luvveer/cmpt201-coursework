@@ -1,0 +1,49 @@
+#define _POSIX_C_SOURCE 200800L
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define size 5
+int main() {
+
+  char *data[size] = {NULL};
+  size_t count = 0;
+  char *line = NULL;
+  size_t len = 0;
+  size_t read;
+
+  while (1) {
+    printf("Please enter some text: ");
+    read = getline(&line, &len, stdin);
+    if (read == -1) {
+      printf("Error in Input");
+      break;
+    }
+
+    size_t j = read -1;
+    while(j >=0 && isspace((unsigned char)line[j])){
+      line[j] = '\0';
+      --j;
+    }
+
+    size_t index = count % size;
+    data[index] = line;
+    count++;
+
+    if (strcmp(line, "print") == 0) {
+      size_t start = (count > size) ? count - size : 0;
+      for (size_t i = start; i < count; i++) {
+        size_t position = i % size;
+        printf("%s\n", data[position]);
+      }
+    }
+  }
+
+  for (int i = 0; i < size; i++) {
+    free(data[i]);
+  }
+  free(line);
+  return 0;
+}

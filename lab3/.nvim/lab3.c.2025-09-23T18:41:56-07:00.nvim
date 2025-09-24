@@ -1,0 +1,38 @@
+#define _POSIX_C_SOURCE 200800L
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define size 5
+int main() {
+
+  char *data[size];
+  size_t count = 0;
+  char *line = NULL, *token = NULL, *saveptr;
+  size_t len = 0;
+  size_t read;
+
+  printf("Please enter some text: ");
+  read = getline(&line, &len, stdin);
+  if (read == -1) {
+    printf("Error in Input");
+    return 0;
+  }
+  if (read != -1) {
+    token = strtok_r(line, " ", &saveptr);
+    // check for if line equal to print
+    size_t index = count % size;
+    data[index] = line;
+    count++;
+
+    if (token == "print") {
+      size_t start = (count > size) ? count - size : 0;
+      for (size_t i = start; i < count; i++) {
+        size_t position = i % size;
+        printf("%s\n", data[position]);
+      }
+    }
+  }
+  return 0;
+}
