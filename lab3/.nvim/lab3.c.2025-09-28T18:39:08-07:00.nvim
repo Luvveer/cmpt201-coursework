@@ -16,7 +16,7 @@ int main() {
   size_t read;
 
   while (1) {
-    printf("Enter input: ");
+    printf("Please enter some text: ");
     read = getline(&line, &len, stdin);
     if (read == -1) {
       printf("Error in Input");
@@ -29,8 +29,7 @@ int main() {
 
     size_t index = count % size;
     free(data[index]);
-    data[index] =
-        strdup(line); // strdup is used to allocate a block of memory for line.
+    data[index] = strdup(line);
     count++;
 
     if (strcmp(line, "print") == 0) {
