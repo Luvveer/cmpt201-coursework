@@ -29,8 +29,8 @@ int main() {
 
     size_t index = count % size;
     free(data[index]);
-    data[index] = malloc(strlen(line) + 1);
-    if (data[index] == NULL) {
+    data[index] = malloc(strlen(line) + 1); 
+    if(data[index] == NULL) {
       fprintf(stderr, "Memory allocation failed\n");
     }
     strcpy(data[index], line);
