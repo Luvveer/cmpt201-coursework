@@ -14,12 +14,10 @@ struct header {
 };
 
 void print_out(char *format, void *data, size_t data_size) {
-
   char buf[BUF_SIZE];
   ssize_t len = snprintf(buf, BUF_SIZE, format,
                          data_size == sizeof(uint64_t) ? *(uint64_t *)data
                                                        : *(void **)data);
-
   if (len < 0) {
     printf("snprintf");
   }
