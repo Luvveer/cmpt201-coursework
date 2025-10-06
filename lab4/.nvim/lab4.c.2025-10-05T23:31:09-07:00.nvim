@@ -35,9 +35,9 @@ int main() {
   }
 
   struct header *first_block = (struct header *)start;
-  print_out("first block:   %p\n", &first_block, sizeof(void *));
+  print_out("first block:   %p\n", first_block, sizeof(void *));
   struct header *second_block = (struct header *)((char *)start + B_SIZE);
-  print_out("second block:  %p\n", &second_block, sizeof(void *));
+  print_out("second block:  %p\n", second_block, sizeof(void *));
 
   first_block->size = B_SIZE;
   print_out("first block size: %lu\n", &first_block->size, sizeof(uint64_t));
