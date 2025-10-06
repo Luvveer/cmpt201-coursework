@@ -1,0 +1,71 @@
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#define _SVID_SOURCE
+#define SIZE 256
+#define B_SIZE 128
+#define BUF_SIZE 128
+struct header {
+  uint64_t size;
+  struct header *next;
+};
+
+void print_out(char *format, void *data, size_t data_size) {
+  char buf[BUF_SIZE];
+  ssize_t len = snprintf(buf, BUF_SIZE, format,
+                         data_size == sizeof(uint64_t) ? *(uint64_t *)data
+                                                       : *(void **)data);
+  if (len < 0) {
+    handle_error("snprintf");
+  }
+  write(STDOUT_FILENO, buf, len);
+}
+
+int main() {
+
+  void *start = sbrk(SIZE);
+  if (start == (void *)-1) {
+    write(STDERR_FILENO, "sbrk failed", 12);
+    return 1;
+  }
+
+  struct header *first_block = (struct header *)start;
+  print_out("first block:   %p", first_block, sizeof(first_block));
+  struct header *second_block = (struct header *)((char *)start + B_SIZE);
+  print_out("second block:  %p", second_block, sizeof(second_block));
+
+  first_block->size = B_SIZE;
+  print_out("first block size: %lu", &first_block->size, sizeof(uint64_t));
+  first_block->next = NULL;
+  print_out("first block next: %p", &first_block->next, sizeof(void *));
+
+  second_block->size = B_SIZE;
+  print_out("second block size: %lu", &second_block->size, sizeof(uint64_t));
+  second_block->next = first_block;
+  print_out("second block next: %p", &second_block->next, sizeof(void *));
+
+  void *first_data = (char *)first_block + sizeof(struct header);
+  void *second_data = (char *)second_block + sizeof(struct header);
+
+  size_t data_size = B_SIZE - sizeof(struct header);
+
+  memset(first_data, 0, data_size);
+  memset(second_data, 1, data_size);
+
+  unsigned char *data_ptr;
+
+  data_ptr = (unsigned char *)first_data;
+  for (size_t i = 0; i < data_size; i++) {
+    print_out("%lu", &data_ptr[i], sizeof(uint64_t));
+  }
+
+  data_ptr = (unsigned char *)second_data;
+  for (size_t i = 0; i < data_size; i++) {
+    print_out("%lu", &data_ptr[i], sizeof(uint64_t));
+  }
+
+  return 0;
+}
